@@ -24,5 +24,4 @@ df[['location_x', 'location_y']] = pd.DataFrame(df['location'].tolist(), index=d
 st.scatter_chart(df, x='location_x', y='location_y',
                  color='shot_outcome',
                  size='shot_body_part',
-                 
                  )
