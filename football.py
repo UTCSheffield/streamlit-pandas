@@ -109,7 +109,15 @@ else:
             df = df[df['shot_outcome'] == shot_outcome]
 
     if event_type != "None":
-        df_fields = ['timestamp', 'time_seconds', 'period', 'player', 'team','duration'] + [col for col in df.columns if event_type.lower() in col]
+        df_fields = ['timestamp',
+                     'time_seconds',
+                     'period',
+                     'player', 
+                     'team', 
+                     'location',
+                     'duration'
+                     ] + [col for col in df.columns if event_type.lower() in col]
+        
         display_df = df[df_fields].copy()
     else:
         display_df = df

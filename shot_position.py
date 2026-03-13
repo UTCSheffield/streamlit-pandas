@@ -16,7 +16,7 @@ df = df[(df['time_seconds'] >= 0) & (df['time_seconds'] <= 3090)]
 # Filter by event type == Shot
 df = df[df['type'] == 'Shot']
 
-df = df[['timestamp', 'time_seconds', 'period', 'location','player', 'team', 'duration', 'goalkeeper_shot_saved_off_target', 'pass_assisted_shot_id', 'pass_shot_assist', 'shot_aerial_won', 'shot_body_part', 'shot_deflected', 'shot_end_location', 'shot_first_time', 'shot_freeze_frame', 'shot_key_pass_id', 'shot_one_on_one', 'shot_outcome', 'shot_saved_off_target', 'shot_statsbomb_xg', 'shot_technique', 'shot_type']]
+df = df[['timestamp', 'time_seconds', 'period', 'player', 'team', 'location', 'duration', 'goalkeeper_shot_saved_off_target', 'pass_assisted_shot_id', 'pass_shot_assist', 'shot_aerial_won', 'shot_body_part', 'shot_deflected', 'shot_end_location', 'shot_first_time', 'shot_freeze_frame', 'shot_key_pass_id', 'shot_one_on_one', 'shot_outcome', 'shot_saved_off_target', 'shot_statsbomb_xg', 'shot_technique', 'shot_type']]
 
 df
 
