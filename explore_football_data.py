@@ -61,16 +61,7 @@ st.title("⚽ Football Data Analysis")
 st.header("Women's Euro 2022 matches -  StatsBomb & Pandas")
 
 # Task 2 Section
-st.header("Task 2: Headed Goals in England vs Sweden")
-
-f = '''
-st.markdown("""
-**Analyze the data:**
-1. Use the data for the "England vs Sweden" game
-2. Filter for "Head" goals instead of "Right Foot"
-3. Click "Analyze" to see results
-""")
-'''
+st.header("Task 1: Find Headed Goals in England vs Sweden Game")
 
 match_name = st.sidebar.selectbox("Select a match to analyze", list(EURO22MATCHES.keys()))
 
@@ -109,7 +100,6 @@ else:
 
 
 
-exit()
 
 st.divider()
 
@@ -120,33 +110,4 @@ st.markdown("""
 **Analyze all shots in the Netherlands vs Sweden game**
 
 Including: player, team, and shot technique
-""")
-
-if st.button("Analyze Netherlands vs Sweden shots"):
-    try:
-        with st.spinner("Fetching data..."):
-            match_id = EURO22MATCHES.get('Netherlands vs Sweden')
-            if match_id is None:
-                st.error("Match 'Netherlands vs Sweden' not found")
-            else:
-                events_df = get_match_events(match_id)
-                
-                # Filter for shots
-                shots = events_df[events_df['type'] == 'Shot']
-                
-                st.metric("Total Shots", len(shots))
-                
-                st.subheader("All Shots Details:")
-                display_cols = ['timestamp', 'period', 'player', 'team', 'shot_technique', 'shot_outcome', 'shot_body_part']
-                available_cols = [col for col in display_cols if col in shots.columns]
-                st.dataframe(shots[available_cols].reset_index(drop=True))
-    except Exception as e:
-        st.error(f"Error fetching data: {e}")
-
-st.divider()
-
-# Footer
-st.markdown("""
----
-**Data Source:** [StatsBomb](https://statsbomb.com/) - Women's Euro 2022 Free Data
 """)
