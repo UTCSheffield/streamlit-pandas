@@ -23,59 +23,69 @@ df = pd.read_csv("sheffielddata.txt",
 est_cols = ["MaxTempC", "MinTempC", "AirFrostDays", "RainfallMM", "SunshineHours"]
 df[est_cols] = df[est_cols].apply(pd.to_numeric, errors="coerce") 
 
-st.header("Data from 'sheffielddata.txt' has been loaded and cleaned.")
+st.subheader("Data from 'sheffielddata.txt' has been loaded and cleaned.")
 st.write(df)
 
-st.header("Example - Most Sunshine Month/Year:")
+st.subheader("Example - Most Sunshine Month/Year:")
 sunniest = df[df["SunshineHours"] == df["SunshineHours"].max()]
 sunniest  # Prints it out as a dataframe, but we can also select specific columns to print out
+st.metric(label="Sunniest Month/Year", value=f"{sunniest['Month'].values[0]}/{sunniest['Year'].values[0]}")
 
-st.write(sunniest[["Year", "Month", "SunshineHours"]])
+st.header("Data Tasks")
+st.subheader("Task 1 - Output climate for 1884 and 1984")
 
+st.subheader("Task 2 - Calculate Difference in temperature between 1884 and 1984. Which was Hotter/Cooler?")
 
-st.header("Task 1 - Output climate for 1884 and 1984")
+st.subheader("Task 3 - Find which month/year was the Coldest?")
 
+st.subheader("Task 4 - Find which month/year was the Hottest?")
 
-st.header("Task 2 - Calculate Difference in temperature between 1884 and 1984. Which was Hotter/Cooler?")
+st.subheader("Task 5 - Which month/year had the most rainfall?")
 
-st.header("Task 3 - Find which month/year was the Coldest?")
-
-st.header("Task 4 - Find which month/year was the Hottest?")
-
-st.header("Task 5 - Which month/year had the most rainfall?")
-
-st.header("Task 6 - Get user to input a year and output that year")
+st.header("User Input Tasks")
+st.subheader("Task 6 - Get user to input a year and output that year")
 # Look at st.number_input and st.selectbox for this task
 
-st.header("Task 7 - Get user to input a Month and output that Month for past 10 years")
+st.subheader("Task 7 - Get user to input a Month and output that Month for past 10 years")
 # Look at st.selectbox
 
-
-st.header("Example - Calculate the average rainfall and  for each month and graph it as a bar chart")
+st.header("Graphing Tasks - Streamlit")
+st.subheader("Example - Calculate the average rainfall and  for each month and graph it as a bar chart")
 avg_rainfall = df.groupby("Month")["RainfallMM"].mean().reset_index()
 avg_rainfall
 
 st.bar_chart(avg_rainfall, x="Month", y="RainfallMM", use_container_width=True)
 
 
-st.header("Example - Graphing the minimum and maximum temperature for July by year as a line chart:")
+st.subheader("Example - Graphing the minimum and maximum temperature for July by year as a line chart:")
 july_data = df[df["Month"] == 7]
 st.line_chart(july_data, x="Year", y=["MinTempC", "MaxTempC"])
 
-st.header("Task 8 - Calculate the average minimum and maximum temperature for each month as table and graph it as a line chart with error lines showing the standard deviation")
+st.subheader("Task 8 - Calculate the average minimum and maximum temperature for each month as table and graph it as a line chart with error lines showing the standard deviation")
 st.write("Hint: use groupby and mean(), you might want to do 2 charts for min and max temperature, or you can do them on the same chart but use the hue parameter to show them as different colours")
 
+st.header("Graphing Tasks - Matplotlib")
+import matplotlib.pyplot as plt
+st.subheader("Example - Graphing the rainfall for January by year as a line chart:")
+january_data = df[df["Month"] == 1]
+plt.figure(figsize=(10, 5),clear=True)
+plt.plot(january_data["Year"], january_data["RainfallMM"], marker='o')
+plt.title("Rainfall for January by Year")
+plt.xlabel("Year")
+plt.ylabel("Rainfall (mm)")
+st.pyplot(plt,use_container_width=True, clear_figure =True)
 
 
+st.header("Graphing Tasks - Seaborn")
 import seaborn as sns
 import matplotlib.pyplot as plt
 
-st.header("Example - Is there a correlation between sunshine hours and maximum temperature:")
+st.subheader("Example - Is there a correlation between sunshine hours and maximum temperature:")
 sns.scatterplot(data=df, x="SunshineHours", y="MaxTempC", hue="Year", legend=True)
 plt.title("Sunshine Hours vs Max Temperature")
 st.pyplot(plt,use_container_width=True, clear_figure =True)
 
-st.header("Example - Graphing the min & max temperature for each month as a line chart with error lines with a scatter plot of all the data which shows the year by colour:")
+st.subheader("Example - Graphing the min & max temperature for each month as a line chart with error lines with a scatter plot of all the data which shows the year by colour:")
 sns.lineplot(data=df, x="Month", y="MinTempC", ci="sd", label="Min Temp")
 sns.lineplot(data=df, x="Month", y="MaxTempC", ci="sd", label="Max Temp")
 sns.scatterplot(data=df, x="Month", y="MinTempC", hue="Year", palette="viridis", legend=True, alpha=0.6)
@@ -83,5 +93,5 @@ sns.scatterplot(data=df, x="Month", y="MaxTempC", hue="Year", palette="viridis",
 plt.title("Min & Max Temperature by Month with Year as Colour")
 st.pyplot(plt,use_container_width=True, clear_figure =True)
 
-st.header("""Task 9 - What does the graph above show about change in Temperature?""")
+st.subheader("Task 9 - What does the graph above show about change in temperatures?")
 st.text("""Add graphs / stats we could use to show this more clearly?""")
