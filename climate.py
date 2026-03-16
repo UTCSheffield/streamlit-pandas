@@ -9,7 +9,11 @@ st.title("Sheffield Climate Data Analysis")
 st.markdown("""
 This repo has a `/.streamlit/config.toml` file.
 
-It has runOnSave set to true, which means that every time we save a file, it will automatically re-run the Streamlit app. This is really useful for development as it means we can see our changes immediately without having to manually refresh the app.                
+It has runOnSave set to true, which means that every time we save a file, 
+it will automatically re-run the Streamlit app. 
+
+Just set up VS Code on the left and this Streamlit app on the right and you
+can see your changes as you make them!                
 """)
 
 df = pd.read_csv("sheffielddata.txt", # I know it's not a csv file but it's close enough
