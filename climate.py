@@ -3,7 +3,7 @@ import pandas as pd
 import matplotlib.pyplot as plt
 import seaborn as sns
 
-#st.set_page_config(page_title="Sheffield Climate Data", layout="wide")
+st.set_page_config(page_title="Sheffield Climate Data", layout="wide")
 st.title("Sheffield Climate Data Analysis")
 
 st.markdown("""
@@ -41,7 +41,8 @@ sunniest  # Prints it out as a dataframe, but we can also select specific column
 
 
 col1, col2 = st.columns(2)
-col1.metric(label="Sunniest Month/Year", value=f"{sunniest['Month'].values[0]}/{sunniest['Year'].values[0]}")
+col1.metric(label="Sunniest Month/Year",
+            value=f"{sunniest['Month'].values[0]}/{sunniest['Year'].values[0]}")
 col2.metric(label="Sunniest Month Hours", value=sunniest['SunshineHours'])
 
 st.header("Data Tasks")
@@ -67,7 +68,7 @@ st.subheader("Example - Calculate the average rainfall and  for each month and g
 avg_rainfall = df.groupby("Month")["RainfallMM"].mean().reset_index()
 avg_rainfall
 
-st.bar_chart(avg_rainfall, x="Month", y="RainfallMM", use_container_width=True)
+st.bar_chart(avg_rainfall, x="Month", y="RainfallMM", width="stretch")
 
 
 st.subheader("Example - Graphing the minimum and maximum temperature for July by year as a line chart:")
@@ -85,7 +86,7 @@ plt.plot(january_data["Year"], january_data["RainfallMM"], marker='o')
 plt.title("Rainfall for January by Year")
 plt.xlabel("Year")
 plt.ylabel("Rainfall (mm)")
-st.pyplot(plt,use_container_width=True, clear_figure =True)
+st.pyplot(plt,width="stretch", clear_figure =True)
 
 
 st.header("Graphing Tasks - Seaborn")
@@ -93,15 +94,15 @@ st.header("Graphing Tasks - Seaborn")
 st.subheader("Example - Is there a correlation between sunshine hours and maximum temperature:")
 sns.scatterplot(data=df, x="SunshineHours", y="MaxTempC", hue="Year", legend=True)
 plt.title("Sunshine Hours vs Max Temperature")
-st.pyplot(plt,use_container_width=True, clear_figure =True)
+st.pyplot(plt,width="stretch", clear_figure =True)
 
 st.subheader("Example - Graphing the min & max temperature for each month as a line chart with error lines with a scatter plot of all the data which shows the year by colour:")
 sns.lineplot(data=df, x="Month", y="MinTempC", ci="sd", label="Min Temp")
 sns.lineplot(data=df, x="Month", y="MaxTempC", ci="sd", label="Max Temp")
 sns.scatterplot(data=df, x="Month", y="MinTempC", hue="Year", palette="viridis", legend=True, alpha=0.6)
-sns.scatterplot(data=df, x="Month", y="MaxTempC", hue="Year", palette="viridis", legend=False, alpha=0.6)
+sns.scatterplot(data=df, x="Month", y="MaxTempC", hue="Year", palette="magma", legend=True, alpha=0.6)
 plt.title("Min & Max Temperature by Month with Year as Colour")
-st.pyplot(plt,use_container_width=True, clear_figure =True)
+st.pyplot(plt,width="stretch", clear_figure =True)
 
 st.subheader("Task 9 - What does the graph above show about change in temperatures?")
 st.text("""Add graphs / stats we could use to show this more clearly?""")
