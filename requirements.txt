@@ -10,3 +10,4 @@ jupyterlab-deck
 haversine
 geopy
 statsbombpy
+openpyxl

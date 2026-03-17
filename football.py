@@ -71,6 +71,8 @@ match_name = st.sidebar.selectbox("Select a match to analyze", list(EURO22MATCHE
 
 event_type = None
 event_type = "Shot"
+body_part = "None"
+shot_outcome = "None"
 
 
 match_id = EURO22MATCHES.get(match_name)
