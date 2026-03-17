@@ -50,11 +50,13 @@ col1.metric(label="Sunniest Month/Year",
 col2.metric(label="Sunniest Month Hours", value=sunniest['SunshineHours'])
 
 st.header("Data Tasks")
+
 st.subheader("Task 1 - Output climate for 1884 and 1984")
 
-st.subheader("Task 2 - Calculate Difference in temperature between 1884 and 1984. Which was Hotter/Cooler?")
-
+st.subheader("Task 2 - Show the average MaxTempC and MinTempC for 1884 and 1984. Which was Hotter/Cooler?")
+# Hint: you can use groupby to do this, or you can filter the data for each year and then calculate the average
 st.subheader("Task 3 - Find which month/year was the Coldest?")
+# Hint: use the same method as we did for finding the sunniest month/year  
 
 st.subheader("Task 4 - Find which month/year was the Hottest?")
 
