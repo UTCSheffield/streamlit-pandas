@@ -106,7 +106,7 @@ sns.lineplot(data=df, x="Month", y="MaxTempC", ci="sd", label="Max Temp")
 sns.scatterplot(data=df, x="Month", y="MinTempC", hue="Year", palette="viridis", legend=True, alpha=0.6)
 sns.scatterplot(data=df, x="Month", y="MaxTempC", hue="Year", palette="magma", legend=True, alpha=0.6)
 plt.title("Min & Max Temperature by Month with Year as Colour")
-st.pyplot(plt,width="stretch", clear_figure =True)
+st.pyplot(plt, use_container_width=True, clear_figure =True)
 
 st.subheader("Task 9 - What does the graph above show about change in temperatures?")
 st.text("""Add graphs / stats we could use to show this more clearly?""")
