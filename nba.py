@@ -2,6 +2,7 @@
 
 from datetime import datetime, timezone
 from io import BytesIO
+from pathlib import Path
 import re
 from urllib.error import URLError
 from urllib.parse import urlencode
@@ -39,6 +40,8 @@ def search_players(query):
 
 
 st.set_page_config(page_title="NBA Season Statistics")
+st.sidebar.image(str(Path(__file__).with_name("UTC Sheffield Olympic Legacy Park - Horizontal.png")), width="stretch")
+st.sidebar.image("https://upload.wikimedia.org/wikipedia/en/0/03/National_Basketball_Association_logo.svg", width="stretch")
 st.title("NBA Season Statistics")
 
 with st.form("player_search"):
