@@ -1,4 +1,4 @@
-"""Create matching Excel workbooks using ESPN NBA regular-season statistics."""
+"""Create matching Excel workbooks using ESPN NBA season and playoff statistics."""
 
 import argparse
 from datetime import datetime, timezone
@@ -9,6 +9,8 @@ from urllib.request import Request, urlopen
 from openpyxl import Workbook
 from openpyxl.styles import Font, PatternFill
 from openpyxl.utils import get_column_letter
+
+from nba_honours import load_honours
 
 
 PLAYERS = {
@@ -26,7 +28,8 @@ PLAYERS = {
 LEGENDS = {"Michael Jordan": 1035, "Kobe Bryant": 110}
 HEADERS = [
     "Season", "Player", "Team", "Games", "Points", "Rebounds",
-    "Assists", "Steals", "Blocks", "3-Pointers Made",
+    "Assists", "Steals", "Blocks", "3-Pointers Made", "Game Type",
+    "Minutes Per Game",
 ]
 STATS_URL = "https://site.web.api.espn.com/apis/common/v3/sports/basketball/nba/athletes/{}/stats"
 PROFILE_URL = "https://site.api.espn.com/apis/common/v3/sports/basketball/nba/athletes/{}"
@@ -43,13 +46,32 @@ def load_player(name, player_id, active):
     profile = get_json(PROFILE_URL.format(player_id))["athlete"]
     if profile["displayName"] != name or (active and not profile["active"]):
         raise ValueError(f"Unexpected profile or inactive player: {name}")
-    data = get_json(STATS_URL.format(player_id))
+    rows = []
+    for season_type, game_type in (("2", "Regular season"), ("3", "Playoffs")):
+        data = get_json(f"{STATS_URL.format(player_id)}?seasontype={season_type}")
+        season_filter = next((item for item in data["filters"] if item["name"] == "seasontype"), None)
+        if season_filter is None:
+            raise ValueError(f"Missing game type in statistics for {name}")
+        if season_filter["value"] != season_type:
+            available = {option["value"] for option in season_filter["options"]}
+            if season_type == "3" and season_type not in available:
+                continue
+            raise ValueError(f"Unexpected game type returned for {name}")
+        rows.extend(load_season_rows(data, name, game_type))
+    if not rows:
+        raise ValueError(f"No season statistics for {name}")
+    game_type_index = HEADERS.index("Game Type")
+    return sorted(rows, key=lambda row: (row[0], row[game_type_index] != "Regular season"))
+
+
+def load_season_rows(data, name, game_type):
     categories = {category["name"]: category for category in data["categories"]}
     averages = categories["averages"]
     totals = categories["totals"]
     games_index = averages["names"].index("gamesPlayed")
-    games = {
-        (row["season"]["year"], row.get("teamId")): int(row["stats"][games_index])
+    minutes_index = averages["names"].index("avgMinutes")
+    season_averages = {
+        (row["season"]["year"], row.get("teamId")): row["stats"]
         for row in averages["statistics"] if row.get("teamId")
     }
     team_names = {str(team["id"]): team["displayName"] for team in data["teams"].values()}
@@ -64,15 +86,17 @@ def load_player(name, player_id, active):
             continue
         stats = row["stats"]
         three_pointers = stats[indices["threePointFieldGoalsMade-threePointFieldGoalsAttempted"]]
+        points = int(stats[indices["points"]])
+        average_stats = season_averages[(row["season"]["year"], team_id)]
+        minutes = average_stats[minutes_index]
         rows.append([
             row["season"]["displayName"], name, team_names[str(team_id)],
-            games[(row["season"]["year"], team_id)],
-            int(stats[indices["points"]]), int(stats[indices["totalRebounds"]]),
+            int(average_stats[games_index]),
+            points, int(stats[indices["totalRebounds"]]),
             int(stats[indices["assists"]]), int(stats[indices["steals"]]),
             int(stats[indices["blocks"]]), int(three_pointers.split("-")[0]),
+            game_type, float(minutes) if minutes not in ("", "-", "--") else None,
         ])
-    if not rows:
-        raise ValueError(f"No regular-season data for {name}")
     return rows
 
 
@@ -92,10 +116,20 @@ def add_table(sheet, headers, rows):
 
 def make_workbook(player_id, player_rows, retrieved):
     workbook = Workbook()
-    workbook.properties.description = f"ESPN regular-season statistics, retrieved {retrieved}. {STATS_URL.format(player_id)}"
+    workbook.properties.description = f"ESPN regular-season and playoff statistics, retrieved {retrieved}. {STATS_URL.format(player_id)}"
     seasons = workbook.active
     seasons.title = "Seasons"
     add_table(seasons, HEADERS, player_rows)
+    
+    # Add Honours sheet with complete NBA honours data
+    honours_data = load_honours()
+    honours_sheet = workbook.create_sheet("Honours")
+    honours_headers = [
+        "Season", "NBA Champion", "NBA Finals Runner-up",
+        "Eastern Conference Champion", "Western Conference Champion", "NBA Cup Champion",
+    ]
+    add_table(honours_sheet, honours_headers, honours_data)
+    
     return workbook
 
 

@@ -90,7 +90,7 @@ if players:
 
 	result = st.session_state.get("workbook")
 	if result and result["player_id"] == player["id"]:
-		st.caption("Regular-season totals. The current season may be incomplete.")
+		st.caption("Regular-season and playoff statistics. The current season may be incomplete.")
 		st.dataframe(pd.DataFrame(result["rows"], columns=HEADERS), hide_index=True, width="stretch")
 		st.download_button(
 			"Download Excel workbook",

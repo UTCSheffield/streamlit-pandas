@@ -39,10 +39,15 @@ The `nba_workbooks` folder contains individual workbooks for ten current players
 plus Michael Jordan and Kobe Bryant. Each has one Seasons sheet with the same
 columns, so students can choose their favourite player and use the same formulas.
 
-The numbers are ESPN regular-season totals; the source and retrieval date are
-stored in each workbook's properties. A season with a team change has one row per team; combined season
-rows are omitted to avoid double counting. The latest season may be incomplete.
+The numbers are ESPN regular-season and playoff totals, except Minutes Per Game,
+which is ESPN's rounded per-game average. The source and retrieval date are
+stored in each workbook's properties. Game Type distinguishes regular
+season from playoffs, which have separate rows. A season with a team change has
+one row per team and game type; combined team rows are omitted to avoid double
+counting. Some players have no playoff rows. The latest season may be incomplete.
 The players are well-known active players, not a verified popularity ranking.
+Use Game Type as a condition when calculating regular-season or playoff totals
+separately; summing all rows includes both.
 
 To search for another NBA player and download a workbook with the same columns,
 run `streamlit run nba.py`. The search and statistics require internet access.
