@@ -33,6 +33,26 @@ py -m streamlit run <filename.py>
 - **climate.py** - Uses streamlit and pandas to explore Sheffield climate data 
 and is where the main tasks are
 
+## NBA Excel Practice
+
+The `nba_workbooks` folder contains individual workbooks for ten current players,
+plus Michael Jordan and Kobe Bryant. Each has one Seasons sheet with the same
+columns, so students can choose their favourite player and use the same formulas.
+
+The numbers are ESPN regular-season totals; the source and retrieval date are
+stored in each workbook's properties. A season with a team change has one row per team; combined season
+rows are omitted to avoid double counting. The latest season may be incomplete.
+The players are well-known active players, not a verified popularity ranking.
+
+To search for another NBA player and download a workbook with the same columns,
+run `streamlit run nba.py`. The search and statistics require internet access.
+
+To refresh all the files (requires internet access and `openpyxl`):
+
+```bash
+python create_nba_workbooks.py
+```
+
 
 ## Requirements
 

@@ -11,3 +11,4 @@ haversine
 geopy
 statsbombpy
 openpyxl
+nba_api
