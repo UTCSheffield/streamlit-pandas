@@ -8,6 +8,7 @@ from urllib.error import URLError
 from urllib.parse import urlencode
 
 import pandas as pd
+import plotly.express as px
 import streamlit as st
 
 from create_nba_workbooks import HEADERS, get_json, load_player, make_workbook
@@ -98,3 +99,35 @@ if players:
 			file_name=result["filename"],
 			mime="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
 		)
+		
+		# Career stats scatter graph
+		df = pd.DataFrame(result["rows"], columns=HEADERS)
+		
+		if not df.empty:
+			st.subheader("Career Stats Scatter Graph")
+			
+			y_stat = st.selectbox(
+				"Y-axis statistic",
+				["Points", "Rebounds", "Assists", "Games", "Steals", "Blocks", "3-Pointers Made"],
+				index=0
+			)
+			
+			# Extract year from season (e.g., "2020-21" -> 2020)
+			df["Year"] = df["Season"].str[:4].astype(int)
+			
+			fig = px.scatter(
+				df,
+				x="Year",
+				y=y_stat,
+				color="Game Type",
+				symbol="Game Type",
+				hover_data=["Season", "Team", "Games"],
+				title=f"{player['name']} - Career {y_stat} by Year",
+				labels={"Year": "Season Year", y_stat: y_stat},
+				color_discrete_map={"Regular season": "#1f77b4", "Playoffs": "#ff7f0e"},
+				symbol_map={"Regular season": "circle", "Playoffs": "diamond"},
+				size_max=10,
+			)
+			fig.update_layout(height=500, showlegend=True)
+			fig.update_xaxes(type="linear")
+			st.plotly_chart(fig, use_container_width=True)
