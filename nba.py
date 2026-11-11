@@ -92,7 +92,8 @@ if players:
 	result = st.session_state.get("workbook")
 	if result and result["player_id"] == player["id"]:
 		st.caption("Regular-season and playoff statistics. The current season may be incomplete.")
-		st.dataframe(pd.DataFrame(result["rows"], columns=HEADERS), hide_index=True, width="stretch")
+		df = pd.DataFrame(result["rows"], columns=HEADERS)
+		st.dataframe(df, hide_index=True, width="stretch")
 		st.download_button(
 			"Download Excel workbook",
 			data=result["data"],
@@ -101,8 +102,6 @@ if players:
 		)
 		
 		# Career stats scatter graph
-		df = pd.DataFrame(result["rows"], columns=HEADERS)
-		
 		if not df.empty:
 			st.subheader("Career Stats Scatter Graph")
 			
@@ -113,10 +112,11 @@ if players:
 			)
 			
 			# Extract year from season (e.g., "2020-21" -> 2020)
-			df["Year"] = df["Season"].str[:4].astype(int)
+			graph_df = df.copy()
+			graph_df["Year"] = graph_df["Season"].str[:4].astype(int)
 			
 			fig = px.scatter(
-				df,
+				graph_df,
 				x="Year",
 				y=y_stat,
 				color="Game Type",
