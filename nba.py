@@ -40,10 +40,10 @@ def search_players(query):
 	return players
 
 
-st.set_page_config(page_title="NBA Season Statistics")
+st.set_page_config(page_title="NBA Players Statistics by Season")
 st.sidebar.image(str(Path(__file__).with_name("UTC Sheffield Olympic Legacy Park - Horizontal.png")), width="stretch")
 st.sidebar.image("https://upload.wikimedia.org/wikipedia/en/0/03/National_Basketball_Association_logo.svg", width="stretch")
-st.title("NBA Season Statistics")
+st.title("NBA Players Statistics by Season")
 
 with st.form("player_search"):
 	query = st.text_input("Player name", placeholder="e.g. Kobe Bryant")
